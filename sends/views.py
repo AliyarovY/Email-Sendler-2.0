@@ -3,24 +3,25 @@ import json
 from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.urls import reverse_lazy
-from .models import *
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from .utils import *
+from .models import *
 
 
-
-class Home_Form(CreateView):
-    global ARGS
+class Home_Form(LoginRequiredMixin, CreateView):
     model = Form
     fields = '__all__'
     template_name = 'sends/home_form.html'
-    success_url = reverse_lazy('post_form')
+    success_url = reverse_lazy('sends:post_form')
+    login_url = reverse_lazy('authh:index')
 
 
 def post_form(request):
+    global ARGS
     user = Form.objects.all().order_by('id').last()
     mls = re.split(r'[ ,;]', user.mails)
-    mls = (x for x in mls if x)
+    mls = [x for x in mls if x]
     user.mails = mls
     user.save()
 
@@ -37,7 +38,6 @@ def post_form(request):
         emails.append(mail)
     clients_id = json.dumps(clients_id)
 
-
     # Message add
     message = Message(msg_title=user.msg_title, msg_body=user.msg_body)
     message.save()
@@ -45,10 +45,14 @@ def post_form(request):
     # Newsletter add
     letter_time = user.letter_time
     letter_periood = user.letter_periood
-    letter = Newsletter(letter_time=letter_time,
-                        letter_periood=letter_periood,
-                        letter_message=message,
-                        letter_clients=clients_id)
+    letter = Newsletter(
+        letter_time=letter_time,
+        letter_periood=letter_periood,
+        letter_message=message,
+        letter_clients=clients_id,
+        letter_mails=json.dumps(emails),
+        letter_user=request.user
+    )
     letter.save()
 
     # Collection
@@ -58,4 +62,4 @@ def post_form(request):
     # End
     ARGS = [message.msg_title, message.msg_body, emails, letter]
     cron_add(letter)
-    return redirect('home_form')
+    return redirect('sends:home_form')

@@ -1,4 +1,7 @@
 from django.db.models import *
+from django.contrib.auth.models import User
+from django.urls import reverse
+
 
 ARGS = []
 
@@ -40,11 +43,22 @@ class Newsletter(Model):
     letter_periood = CharField(max_length=10, choices=PERIOOD_CHOICES, default=DAY)
     letter_status = CharField(max_length=10, choices=STATUS_CHOICES, default=STARTED)
     letter_message = ForeignKey('Message', on_delete=SET_NULL, null=True)
-    letter_clients = TextField()
+    letter_clients = TextField(**NULLABLE)
+    letter_mails = TextField(**NULLABLE)
+    letter_user = ForeignKey(User, on_delete=CASCADE, null=True, default=None)
 
 
     def __str__(self):
-        return str(self.letter_time)
+        return str(self.letter_user) + ' : '+ str(self.letter_time)
+
+    def get_url(self):
+        return reverse('mailings:update', args=[self.id])
+
+    def get_del_url(self):
+        return reverse('mailings:delete', args=[self.id])
+
+    def print_periood(self):
+        return str(self.letter_periood)
 
 
 class Message(Model):

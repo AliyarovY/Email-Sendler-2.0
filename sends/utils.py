@@ -15,19 +15,18 @@ def cron_add(nl_object):
     dt = datetime.now()
     periood = nl_object.letter_periood
     if periood == MONTH:
-        result[-2] = '/' + dt.month
+        result[-2] = '/' + str(dt.month)
     elif periood == WEEK:
-        result[~0] = '/' + dt.isoweekday()
+        result[~0] = '/' + str(dt.isoweekday())
 
     result = (' '.join(result), 'django.core.management.mail_send', ['command'])
     settings.CRONJOBS.append(result)
 
     x = subprocess.run(
-    'python3 manage.py crontab add'.split(),
-    stdout = subprocess.DEVNULL,
-    stderr = subprocess.DEVNULL,
-    encoding = 'utf-8'
+        'python manage.py crontab add'.split(),
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        encoding='utf-8'
     )
 
     return
-

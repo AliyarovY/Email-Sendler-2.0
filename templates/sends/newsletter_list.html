@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MAILINGS</title>
+</head>
+<body>
+<form method="post">{% csrf_token %}
+    <a href="{% url 'sends:home_form' %}">HOME</a>
+    {%for x in object_list%}
+    <h2>{{x.letter_time}}</h2><br>
+    <h2>{{x.print_periood}}</h2><br>
+    <h2>{{x.letter_status}}</h2><br>
+    <h2>{{x.letter_message}}</h2><br>
+    <h2>{{x.letter_message.msg_body}}</h2><br>
+    <h2>{{x.letter_mails}}</h2><br>
+    <h2>{{x.letter_user}}</h2><br>
+    <br><br>
+    <a href="{{ x.get_url }}">update</a>
+    <a href="{{ x.get_del_url }}">delete</a>
+    ---------------------------------------------------------------------------------------
+    <br><br><br><br><br>
+    {% endfor %}
+</form>
+</body>
+</html>
+<a href="?page=1"><<</a>
+{% for page in paginator.page_range %}
+    {% if page == page_obj.number %}
+        {{page}}
+    {% elif  page in check  %}
+        <a href="?page={{page}}">{{page}}</a>
+    {% endif %}
+{%endfor%}
+
+<A href="?page={{ paginator.num_pages }}">>></A>
+
+
+
