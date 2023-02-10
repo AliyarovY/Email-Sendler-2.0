@@ -1,5 +1,5 @@
 from django.db.models import *
-from django.contrib.auth.models import User
+from authh.models import User
 from django.urls import reverse
 
 

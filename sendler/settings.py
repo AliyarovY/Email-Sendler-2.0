@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 
 DEBUG = not not os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+
         },
     },
 ]
@@ -119,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -147,3 +148,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 CRONJOBS = []
 
 LOGIN_REDIRECT_URL = reverse_lazy('sends:home_form')
+
+AUTH_USER_MODEL = 'authh.User'

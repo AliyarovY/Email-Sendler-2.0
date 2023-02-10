@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+from mailings.views import page_not_found
 
 
 urlpatterns = [
@@ -10,3 +11,5 @@ urlpatterns = [
     path('captcha/', include('captcha.urls'))
 
 ]
+
+handler404 = page_not_found

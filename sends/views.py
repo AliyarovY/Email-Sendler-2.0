@@ -16,6 +16,14 @@ class Home_Form(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('sends:post_form')
     login_url = reverse_lazy('authh:index')
 
+    def get_context_data(self, **kwargs):
+        kwargs['count'] = Newsletter.objects.all().count()
+        kwargs['active'] = Newsletter.objects.filter(letter_status='created').count()
+
+        if 'form' not in kwargs:
+            kwargs['form'] = self.get_form()
+        return super().get_context_data(**kwargs)
+
 
 def post_form(request):
     global ARGS

@@ -2,7 +2,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from sends.models import *
 from loguru import logger
+from datetime import datetime
 from django.core.management import BaseCommand
+
 
 
 logger.add('sendler.log',
@@ -12,7 +14,6 @@ logger.add('sendler.log',
            compression='zip',
            colorize=True,
            )
-
 
 class Command(BaseCommand):
     @logger.catch
